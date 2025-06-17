@@ -1,4 +1,3 @@
----
 
 # 🛒 Minha Lista de Compras Inteligente
 
