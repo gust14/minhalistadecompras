@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.onclick = null;
         }
 
-        return modal; // Retorna o modal para que se possa adicionar listeners específicos se necessário
+        return modal; // Retorna o modal para que possa adicionar listeners específicos se necessário
     };
 
     // --- Renderização da Lista ---

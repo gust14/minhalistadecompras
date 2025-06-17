@@ -1,5 +1,5 @@
 
-# 🛒 Minha Lista de Compras Inteligente
+# 🛒 Minha Lista de Compras
 
 ## Visão Geral do Projeto
 
