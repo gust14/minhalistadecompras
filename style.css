@@ -635,9 +635,6 @@ footer .fas {
         line-height: 1.4; /* Espaçamento entre as linhas internas do p */
     }
 
-    footer p a {
-        margin-top: 2px; /* Espaço entre o coração e o link "por 14web" */
-    }
 
     /* Ajuste para o coração no rodapé para ficar na mesma linha do "Feito com" */
     footer p .fas {

@@ -22,12 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Função para criar e exibir um modal genérico
     const showModal = (title, contentHTML, actionsHTML = '') => {
         let modal = document.getElementById('app-modal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'app-modal';
-            modal.classList.add('modal');
-            document.body.appendChild(modal);
+        // Se o modal já existe e está visível, force o fechamento antes de criar um novo
+        if (modal && modal.classList.contains('show')) {
+            modal.classList.remove('show');
+            modal.remove(); // Remove imediatamente o modal anterior para evitar conflitos de ID/eventos
         }
+
+        modal = document.createElement('div');
+        modal.id = 'app-modal'; // Mantém o ID único
+        modal.classList.add('modal');
+        document.body.appendChild(modal);
 
         modal.innerHTML = `
             <div class="modal-content">
@@ -45,45 +49,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeButton = modal.querySelector('.close-button');
         closeButton.onclick = () => {
             modal.classList.remove('show');
-            setTimeout(() => modal.remove(), 300); // Remove o modal do DOM
+            setTimeout(() => modal.remove(), 300); // Esconde e remove após a animação
         };
 
+        // Adiciona um listener genérico para botões com as classes de ação para fechar o modal
+        const actionButtons = modal.querySelectorAll('.confirm-btn, .cancel-btn, .danger-btn, .confirm-delete-btn, .confirm-clear-btn, .confirm-edit-btn');
+        actionButtons.forEach(button => {
+            // Remove qualquer listener anterior para evitar duplicação ou conflitos
+            button.onclick = null; 
+            button.onclick = (event) => {
+                event.stopPropagation(); // Previne que o clique se propague para o background do modal
+                modal.classList.remove('show');
+                setTimeout(() => modal.remove(), 300); // Esconde e remove após a animação
+            };
+        });
+
+        // Se NÃO houver botões de ação explícitos, permite fechar clicando fora do modal
+        // Isso evita que modais de aviso simples fiquem presos sem um botão "OK"
         const modalActionsDiv = modal.querySelector('.modal-actions');
-        if (modalActionsDiv && modalActionsDiv.children.length > 0) {
-            modal.onclick = null; // Remove o fechamento por clique fora se houver botões de ação
-            // Adiciona um listener para cada botão de ação dentro do modal para fechar o modal
-            Array.from(modalActionsDiv.children).forEach(button => {
-                if (!button.classList.contains('confirm-btn') && !button.classList.contains('cancel-btn') && !button.classList.contains('danger-btn') && !button.classList.contains('confirm-delete-btn') && !button.classList.contains('confirm-clear-btn') && !button.classList.contains('confirm-edit-btn') && !button.id === 'entendi-salvar-btn') {
-                    button.onclick = () => {
-                        modal.classList.remove('show');
-                        setTimeout(() => modal.remove(), 300);
-                    };
-                }
-            });
-        } else {
-            // Se não houver botões de ação explícitos, permite fechar clicando fora
+        if (!modalActionsDiv || modalActionsDiv.children.length === 0) {
             modal.onclick = (event) => {
                 if (event.target === modal) {
                     modal.classList.remove('show');
                     setTimeout(() => modal.remove(), 300);
                 }
             };
+        } else {
+            // Se houver botões de ação, o clique fora NÃO deve fechar o modal
+            modal.onclick = null;
         }
 
-        // Adiciona um listener genérico para botões com a classe 'confirm-btn' para fechar o modal
-        const confirmButtons = modal.querySelectorAll('.confirm-btn, .cancel-btn'); // Inclui cancel-btn para fechar em confirmações
-        confirmButtons.forEach(button => {
-            button.onclick = (event) => {
-                // Previne que a ação padrão do botão seja executada se já tiver uma definida
-                event.stopPropagation();
-                modal.classList.remove('show');
-                setTimeout(() => modal.remove(), 300);
-            };
-        });
-
-        return modal; // Retorna o modal para que se possa adicionar listeners específicos
+        return modal; // Retorna o modal para que se possa adicionar listeners específicos se necessário
     };
-
 
     // --- Renderização da Lista ---
     const renderizarLista = () => {
@@ -135,11 +132,12 @@ document.addEventListener('DOMContentLoaded', () => {
             itemQuantidadeInput.value = '';
             itemNomeInput.focus();
         } else {
+            // Este modal não possui um botão de "OK" que precisa ser clicado para fechar, então a lógica padrão do showModal é suficiente
             showModal(
                 'Ops! Algo deu errado!',
                 '<p>Por favor, preencha todos os campos corretamente.</p><p>O nome do item não pode ser vazio, e o valor unitário e a quantidade devem ser números válidos maiores que zero.</p>',
                 '<button class="confirm-btn">Entendi</button>'
-            ).querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+            );
         }
     });
 
@@ -154,29 +152,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (target.classList.contains('delete-btn') || target.parentElement.classList.contains('delete-btn')) {
             // Modal de Confirmação de Exclusão
-            showModal(
+            const confirmModal = showModal(
                 'Confirmar Exclusão',
                 `<p>Você tem certeza que deseja remover **"${listaDeCompras[index].nome}"** da sua lista?</p><p style="color: var(--danger-color); font-weight: bold;">Essa ação não poderá ser desfeita.</p>`,
                 `<button class="danger-btn confirm-delete-btn"><i class="fas fa-trash-alt"></i> Sim, Excluir</button>
                  <button class="cancel-btn"><i class="fas fa-times"></i> Cancelar</button>`
             );
-            const modal = document.getElementById('app-modal');
-            modal.querySelector('.confirm-delete-btn').onclick = () => {
+            
+            confirmModal.querySelector('.confirm-delete-btn').onclick = () => {
                 listaDeCompras.splice(index, 1);
                 renderizarLista();
-                modal.classList.remove('show');
-                setTimeout(() => modal.remove(), 300);
+                confirmModal.classList.remove('show');
+                setTimeout(() => confirmModal.remove(), 300);
             };
-            modal.querySelector('.cancel-btn').onclick = () => {
-                modal.classList.remove('show');
-                setTimeout(() => modal.remove(), 300);
+            confirmModal.querySelector('.cancel-btn').onclick = () => {
+                confirmModal.classList.remove('show');
+                setTimeout(() => confirmModal.remove(), 300);
             };
 
         } else if (target.classList.contains('edit-btn') || target.parentElement.classList.contains('edit-btn')) {
             const item = listaDeCompras[index];
 
             // Modal de Edição de Item
-            showModal(
+            const editModal = showModal(
                 'Editar Item',
                 `
                 <div style="text-align: left;">
@@ -194,12 +192,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 `
             );
 
-            const modal = document.getElementById('app-modal');
-            const editNome = modal.querySelector('#edit-nome');
-            const editValor = modal.querySelector('#edit-valor');
-            const editQuantidade = modal.querySelector('#edit-quantidade');
+            const editNome = editModal.querySelector('#edit-nome');
+            const editValor = editModal.querySelector('#edit-valor');
+            const editQuantidade = editModal.querySelector('#edit-quantidade');
 
-            modal.querySelector('.confirm-edit-btn').onclick = () => {
+            editModal.querySelector('.confirm-edit-btn').onclick = () => {
                 const novoNome = editNome.value.trim();
                 const novoValor = parseFloat(editValor.value);
                 const novaQuantidade = parseInt(editQuantidade.value);
@@ -209,15 +206,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.valor = novoValor;
                     item.quantidade = novaQuantidade;
                     renderizarLista();
-                    modal.classList.remove('show');
-                    setTimeout(() => modal.remove(), 300);
+                    editModal.classList.remove('show');
+                    setTimeout(() => editModal.remove(), 300);
                 } else {
+                    // Aviso dentro do modal de edição, não precisa de novo modal completo
                     alert('Dados inválidos. Por favor, preencha todos os campos corretamente.');
                 }
             };
-            modal.querySelector('.cancel-btn').onclick = () => {
-                modal.classList.remove('show');
-                setTimeout(() => modal.remove(), 300);
+            editModal.querySelector('.cancel-btn').onclick = () => {
+                editModal.classList.remove('show');
+                setTimeout(() => editModal.remove(), 300);
             };
         }
     });
@@ -229,31 +227,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Lista Vazia',
                 '<p>Sua lista de compras já está vazia. Não há itens para limpar!</p>',
                 '<button class="confirm-btn">Ok</button>'
-            ).querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+            );
             return;
         }
 
-        showModal(
+        const confirmClearModal = showModal(
             'Limpar Toda a Lista?',
             `<p>Você está prestes a **excluir TODOS** os itens da sua lista de compras.</p><p style="color: var(--danger-color); font-weight: bold;">Essa ação é irreversível!</p><p>Deseja continuar?</p>`,
             `<button class="danger-btn confirm-clear-btn"><i class="fas fa-trash-alt"></i> Sim, Limpar Tudo</button>
              <button class="cancel-btn"><i class="fas fa-times"></i> Cancelar</button>`
         );
-        const modal = document.getElementById('app-modal');
-        modal.querySelector('.confirm-clear-btn').onclick = () => {
+        
+        confirmClearModal.querySelector('.confirm-clear-btn').onclick = () => {
             listaDeCompras = [];
             renderizarLista();
-            modal.classList.remove('show');
-            setTimeout(() => modal.remove(), 300);
-            showModal(
-                'Lista Limpa!',
-                '<p>Sua lista de compras foi esvaziada com sucesso. Comece uma nova agora!</p>',
-                '<button class="confirm-btn">Perfeito!</button>'
-            ).querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+            confirmClearModal.classList.remove('show');
+            setTimeout(() => { // Espera o modal de confirmação fechar
+                confirmClearModal.remove();
+                showModal( // Então mostra o modal de sucesso
+                    'Lista Limpa!',
+                    '<p>Sua lista de compras foi esvaziada com sucesso. Comece uma nova agora!</p>',
+                    '<button class="confirm-btn">Perfeito!</button>'
+                );
+            }, 300);
         };
-        modal.querySelector('.cancel-btn').onclick = () => {
-            modal.classList.remove('show');
-            setTimeout(() => modal.remove(), 300);
+        confirmClearModal.querySelector('.cancel-btn').onclick = () => {
+            confirmClearModal.classList.remove('show');
+            setTimeout(() => confirmClearModal.remove(), 300);
         };
     });
 
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Lista Vazia',
                 '<p>Não há itens na sua lista para gerar um PDF. Adicione alguns itens primeiro!</p>',
                 '<button class="confirm-btn">Ok</button>'
-            ).querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+            );
             return;
         }
 
@@ -335,8 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Rodapé aprimorado
         doc.setFontSize(smallFontSize);
-        // Não é possível formatar negrito diretamente em .text(), mas podemos centralizar.
-        // O "amor" em negrito será apenas no HTML. No PDF, focamos na clareza.
         doc.text("Feito com amor pela Minha Lista de Compras", pageWidth / 2, y, { align: 'center' });
 
         doc.save('minha_lista_de_compras.pdf');
@@ -365,11 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Lista Vazia',
                 '<p>Sua lista está vazia. Não há itens para salvar em um arquivo.</p>',
                 '<button class="confirm-btn">Entendi</button>'
-            ).querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+            );
             return;
         }
 
-        showModal(
+        const tutorialModal = showModal(
             'Salvar sua Lista: Como funciona?',
             `
             <p>Ao salvar sua lista, você cria um arquivo no seu dispositivo. Este arquivo é perfeito para:</p>
@@ -386,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `<button id="entendi-salvar-btn" class="confirm-btn"><i class="fas fa-check-circle"></i> Entendi, Salvar Lista Agora</button>`
         );
 
-        document.getElementById('entendi-salvar-btn').onclick = () => {
+        tutorialModal.querySelector('#entendi-salvar-btn').onclick = () => {
             const dataStr = JSON.stringify(listaDeCompras, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -398,16 +396,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            const modal = document.getElementById('app-modal');
-            modal.classList.remove('show');
-            setTimeout(() => modal.remove(), 300);
-
-            showModal(
-                'Lista Salva!',
-                `<p>Sua lista foi salva com sucesso como **"minha_lista_de_compras.json"**!</p>
-                 <p>Você pode encontrá-la na sua pasta de downloads.</p>`,
-                '<button class="confirm-btn">Obrigado!</button>'
-            ).querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+            tutorialModal.classList.remove('show');
+            setTimeout(() => { // Espera o modal de tutorial fechar
+                tutorialModal.remove();
+                showModal( // Então mostra o modal de sucesso
+                    'Lista Salva!',
+                    `<p>Sua lista foi salva com sucesso como **"minha_lista_de_compras.json"**!</p>
+                     <p>Você pode encontrá-la na sua pasta de downloads.</p>`,
+                    '<button class="confirm-btn">Obrigado!</button>'
+                );
+            }, 300);
         };
     });
 
@@ -424,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     const importedList = JSON.parse(e.target.result);
                     if (Array.isArray(importedList) && importedList.every(item => item.nome && typeof item.valor === 'number' && typeof item.quantidade === 'number')) {
-                        showModal(
+                        const importOptionsModal = showModal(
                             'Importar Lista',
                             `<p>Sua lista importada contém **${importedList.length}** item(ns).</p>
                              <p>Deseja substituir sua lista atual ou adicionar estes itens à sua lista?</p>`,
@@ -434,38 +432,42 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="cancel-btn"><i class="fas fa-times"></i> Cancelar</button>
                             `
                         );
-                        const modal = document.getElementById('app-modal');
-                        modal.querySelector('#replace-list-btn').onclick = () => {
+                        
+                        importOptionsModal.querySelector('#replace-list-btn').onclick = () => {
                             listaDeCompras = importedList;
                             renderizarLista();
-                            modal.classList.remove('show');
-                            setTimeout(() => modal.remove(), 300);
-                            showModal('Sucesso!', '<p>Lista substituída com sucesso!</p>', '<button class="confirm-btn">Ok</button>').querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+                            importOptionsModal.classList.remove('show');
+                            setTimeout(() => { // Espera o modal de opções fechar
+                                importOptionsModal.remove();
+                                showModal('Sucesso!', '<p>Lista substituída com sucesso!</p>', '<button class="confirm-btn">Ok</button>');
+                            }, 300);
                         };
-                        modal.querySelector('#add-to-list-btn').onclick = () => {
+                        importOptionsModal.querySelector('#add-to-list-btn').onclick = () => {
                             listaDeCompras = [...listaDeCompras, ...importedList];
                             renderizarLista();
-                            modal.classList.remove('show');
-                            setTimeout(() => modal.remove(), 300);
-                            showModal('Sucesso!', '<p>Itens adicionados à sua lista!</p>', '<button class="confirm-btn">Ok</button>').querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+                            importOptionsModal.classList.remove('show');
+                            setTimeout(() => { // Espera o modal de opções fechar
+                                importOptionsModal.remove();
+                                showModal('Sucesso!', '<p>Itens adicionados à sua lista!</p>', '<button class="confirm-btn">Ok</button>');
+                            }, 300);
                         };
-                        modal.querySelector('.cancel-btn').onclick = () => {
-                            modal.classList.remove('show');
-                            setTimeout(() => modal.remove(), 300);
+                        importOptionsModal.querySelector('.cancel-btn').onclick = () => {
+                            importOptionsModal.classList.remove('show');
+                            setTimeout(() => importOptionsModal.remove(), 300);
                         };
                     } else {
                         showModal(
                             'Erro ao Importar',
                             '<p>O arquivo JSON selecionado é inválido ou está em um formato incorreto.</p><p>Por favor, selecione um arquivo de lista de compras válido exportado pelo aplicativo.</p>',
                             '<button class="confirm-btn">Entendi</button>'
-                        ).querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+                        );
                     }
                 } catch (error) {
                     showModal(
                         'Erro ao Ler Arquivo',
                         `<p>Ocorreu um erro ao tentar ler o arquivo: **${error.message}**</p><p>Certifique-se de que é um arquivo JSON válido.</p>`,
                         '<button class="confirm-btn">Ok</button>'
-                    ).querySelector('.confirm-btn').onclick = () => document.getElementById('app-modal').classList.remove('show');
+                    );
                     console.error('Erro ao parsear JSON:', error);
                 }
             };
