@@ -45,19 +45,45 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeButton = modal.querySelector('.close-button');
         closeButton.onclick = () => {
             modal.classList.remove('show');
-            setTimeout(() => modal.style.display = 'none', 300); // Esconde após a animação
             setTimeout(() => modal.remove(), 300); // Remove o modal do DOM
         };
 
-        modal.onclick = (event) => {
-            if (event.target === modal) {
+        const modalActionsDiv = modal.querySelector('.modal-actions');
+        if (modalActionsDiv && modalActionsDiv.children.length > 0) {
+            modal.onclick = null; // Remove o fechamento por clique fora se houver botões de ação
+            // Adiciona um listener para cada botão de ação dentro do modal para fechar o modal
+            Array.from(modalActionsDiv.children).forEach(button => {
+                if (!button.classList.contains('confirm-btn') && !button.classList.contains('cancel-btn') && !button.classList.contains('danger-btn') && !button.classList.contains('confirm-delete-btn') && !button.classList.contains('confirm-clear-btn') && !button.classList.contains('confirm-edit-btn') && !button.id === 'entendi-salvar-btn') {
+                    button.onclick = () => {
+                        modal.classList.remove('show');
+                        setTimeout(() => modal.remove(), 300);
+                    };
+                }
+            });
+        } else {
+            // Se não houver botões de ação explícitos, permite fechar clicando fora
+            modal.onclick = (event) => {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                    setTimeout(() => modal.remove(), 300);
+                }
+            };
+        }
+
+        // Adiciona um listener genérico para botões com a classe 'confirm-btn' para fechar o modal
+        const confirmButtons = modal.querySelectorAll('.confirm-btn, .cancel-btn'); // Inclui cancel-btn para fechar em confirmações
+        confirmButtons.forEach(button => {
+            button.onclick = (event) => {
+                // Previne que a ação padrão do botão seja executada se já tiver uma definida
+                event.stopPropagation();
                 modal.classList.remove('show');
-                setTimeout(() => modal.style.display = 'none', 300);
                 setTimeout(() => modal.remove(), 300);
-            }
-        };
+            };
+        });
+
         return modal; // Retorna o modal para que se possa adicionar listeners específicos
     };
+
 
     // --- Renderização da Lista ---
     const renderizarLista = () => {
@@ -323,10 +349,10 @@ document.addEventListener('DOMContentLoaded', () => {
             `
             <p>Facilite a vida de seus amigos e familiares. Com a "Minha Lista de Compras", organizar o supermercado nunca foi tão fácil!</p>
             <div class="social-share-buttons">
-                <a href="https://api.whatsapp.com/send?text=${encodeURIComponent('Crie suas listas de compras de forma inteligente e economize tempo no supermercado! Experimente "Minha Lista de Compras": URL_DO_SEU_APP.com')}" target="_blank" class="whatsapp-btn" aria-label="Compartilhar no WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('URL_DO_SEU_APP.com')}&quote=${encodeURIComponent('Crie suas listas de compras de forma inteligente e economize tempo no supermercado! Experimente "Minha Lista de Compras".')}" target="_blank" class="facebook-btn" aria-label="Compartilhar no Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Crie suas listas de compras de forma inteligente e economize tempo no supermercado! #MinhaListaDeCompras #SupermercadoInteligente')}&url=${encodeURIComponent('URL_DO_SEU_APP.com')}" target="_blank" class="twitter-btn" aria-label="Compartilhar no Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="mailto:?subject=${encodeURIComponent('Minha Lista de Compras Inteligente')}&body=${encodeURIComponent('Olá! Encontrei este aplicativo incrível para organizar listas de supermercado. É muito fácil de usar e ajuda a economizar tempo. Experimente: URL_DO_SEU_APP.com')}" class="email-btn" aria-label="Compartilhar por Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://api.whatsapp.com/send?text=${encodeURIComponent('Crie suas listas de compras de forma inteligente e economize tempo no supermercado! Experimente "Minha Lista de Compras": https://minhalistadecompras-omega.vercel.app/')}" target="_blank" class="whatsapp-btn" aria-label="Compartilhar no WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://minhalistadecompras-omega.vercel.app/')}&quote=${encodeURIComponent('Crie suas listas de compras de forma inteligente e economize tempo no supermercado! Experimente "Minha Lista de Compras".')}" target="_blank" class="facebook-btn" aria-label="Compartilhar no Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Crie suas listas de compras de forma inteligente e economize tempo no supermercado! #MinhaListaDeCompras #SupermercadoInteligente')}&url=${encodeURIComponent('https://minhalistadecompras-omega.vercel.app/')}" target="_blank" class="twitter-btn" aria-label="Compartilhar no Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="mailto:?subject=${encodeURIComponent('Minha Lista de Compras Inteligente')}&body=${encodeURIComponent('Olá! Encontrei este aplicativo incrível para organizar listas de supermercado. É muito fácil de usar e ajuda a economizar tempo. Experimente: https://minhalistadecompras-omega.vercel.app/')}" class="email-btn" aria-label="Compartilhar por Email"><i class="fas fa-envelope"></i></a>
             </div>
             `
         );

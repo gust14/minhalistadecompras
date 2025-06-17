@@ -500,25 +500,27 @@ footer .fas {
 @media (max-width: 600px) {
     /* AJUSTES NO CABEÇALHO */
     header h1 {
-        font-size: 1.8em; /* Reduz a fonte do título principal */
-        /* display, align-items, justify-content e gap já estão no estilo global, mas garanta que não haja override */
-        gap: 5px; /* Ajusta o espaçamento entre o texto e o ícone no mobile */
+        font-size: 1.6em; /* Um pouco menor para caber melhor */
+        flex-direction: column; /* Ícone acima do título */
+        text-align: center; /* Centraliza o texto */
+        gap: 2px; /* Reduz o espaço entre o ícone e o texto */
     }
 
     header h1 .fas {
-        font-size: 0.8em; /* Ajusta o tamanho do ícone no mobile */
-        /* Removido margin-left para usar o gap */
+        font-size: 1.5em; /* Aumenta o tamanho do ícone para destacá-lo acima do título */
+        margin-bottom: 5px; /* Adiciona um pequeno espaçamento abaixo do ícone */
+        margin-left: 0; /* Garante que não haja alinhamento lateral */
     }
 
     /* AJUSTES GERAIS DE ESPAÇAMENTO E FONTES */
     body {
-        padding: 10px; /* Reduz o padding geral da página para otimizar espaço */
+        padding: 10px; /* Reduz o padding geral da página */
     }
 
     header {
         padding: 15px 0; /* Ajusta o padding vertical do cabeçalho */
         margin-bottom: 15px; /* Reduz a margem inferior do cabeçalho */
-        border-radius: 0; /* Pode remover bordas arredondadas no topo para uma sensação de "tela cheia" */
+        border-radius: 0; /* Remove bordas arredondadas no topo para uma sensação de "tela cheia" */
     }
 
     main {
@@ -528,14 +530,19 @@ footer .fas {
     }
 
     section {
-        margin-bottom: 25px; /* Um pouco menos de margem entre seções */
+        margin-bottom: 20px; /* Um pouco menos de margem entre seções */
     }
 
     h2 {
-        font-size: 1.6em; /* Reduz um pouco o tamanho do título da seção */
+        font-size: 1.4em; /* Reduz um pouco o tamanho do título da seção */
         padding-bottom: 8px; /* Ajusta o padding inferior do título */
         margin-bottom: 15px; /* Ajusta a margem inferior do título */
     }
+
+    h2 .fas {
+        font-size: 0.9em; /* Ajusta o tamanho dos ícones dos títulos das seções */
+    }
+
 
     .input-group {
         flex-direction: column; /* Coloca os inputs e botão em coluna */
@@ -581,11 +588,11 @@ footer .fas {
     }
 
     .item-info p {
-        font-size: 0.9em; /* Torna as informações do item ligeiramente menores */
+        font-size: 0.85em; /* Torna as informações do item ligeiramente menores */
     }
 
     .item-info strong {
-        font-size: 1.05em; /* Mantém o nome do item com bom destaque */
+        font-size: 1em; /* Mantém o nome do item com bom destaque */
     }
 
     .item-actions {
@@ -597,7 +604,7 @@ footer .fas {
 
     .item-actions button {
         padding: 8px 12px; /* Ajusta padding dos botões de editar/excluir */
-        font-size: 0.85em; /* Ajusta fonte dos botões de editar/excluir */
+        font-size: 0.8em; /* Ajusta fonte dos botões de editar/excluir */
     }
 
     .total-area {
@@ -606,7 +613,7 @@ footer .fas {
     }
 
     .total-area h3 {
-        font-size: 1.6em; /* Ajusta o tamanho da fonte do total geral */
+        font-size: 1.5em; /* Ajusta o tamanho da fonte do total geral */
     }
 
     /* AJUSTES NO RODAPÉ */
@@ -614,11 +621,58 @@ footer .fas {
         padding: 10px; /* Reduz o padding do footer */
         font-size: 0.8em; /* Fonte um pouco menor para o rodapé */
         margin-top: 15px; /* Reduz a margem superior do rodapé */
-        /* display, flex-direction, align-items, text-align já estão na regra global para mobile */
+        flex-direction: column; /* Organiza os itens em coluna */
+        align-items: center; /* Centraliza os itens horizontalmente */
+        text-align: center; /* Centraliza o texto dentro de cada item */
     }
 
-    /* Faz a linha "Feito com..." ir para baixo da linha de copyright */
-    footer p:first-child {
-        margin-bottom: 2px; /* Pequeno espaçamento entre as linhas */
+    /* Esta regra é fundamental para separar as duas partes do parágrafo */
+    footer p {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0; /* Remove margens padrão */
+        line-height: 1.4; /* Espaçamento entre as linhas internas do p */
+    }
+
+    footer p a {
+        margin-top: 2px; /* Espaço entre o coração e o link "por 14web" */
+    }
+
+    /* Ajuste para o coração no rodapé para ficar na mesma linha do "Feito com" */
+    footer p .fas {
+        margin-right: 2px; /* Espaço entre 'com' e o coração */
+        margin-left: 2px; /* Espaço entre o coração e 'por 14web' */
+        display: inline-block; /* Garante que o coração fique ao lado do texto antes do link */
+    }
+
+    /* Modal Styling for mobile */
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-content h3 {
+        font-size: 1.4em;
+    }
+
+    .modal-content p {
+        font-size: 0.9em;
+    }
+
+    .modal-content .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .modal-content .modal-actions button {
+        max-width: 100%;
+    }
+
+    .social-share-buttons {
+        gap: 10px; /* Menor gap para botões de compartilhamento */
+    }
+    .social-share-buttons a {
+        width: 45px; /* Ligeiramente menores */
+        height: 45px;
+        font-size: 1.3em;
     }
 }
