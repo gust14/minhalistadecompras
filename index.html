@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Lista de Compras Inteligente</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="description" content="Crie, organize e compartilhe suas listas de supermercado de forma inteligente e intuitiva com a Minha Lista de Compras. Economize tempo e dinheiro!">
+    <meta name="keywords" content="lista de compras, supermercado, compras, economia, organização, mercado, lista, share, pdf, exportar">
+    <meta property="og:title" content="Minha Lista de Compras Inteligente">
+    <meta property="og:description" content="Crie, organize e compartilhe suas listas de supermercado de forma inteligente e intuitiva com a Minha Lista de Compras. Economize tempo e dinheiro!">
+    <meta property="og:image" content="URL_DA_IMAGEM_PADRAO_DO_APP.png"> <meta property="og:url" content="URL_DO_SEU_APP.com"> <meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+    <header>
+        <h1>Minha Lista de Compras <i class="fas fa-shopping-basket"></i></h1>
+    </header>
+
+    <main>
+        <section id="item-input">
+            <h2>Adicionar Item</h2>
+            <div class="input-group">
+                <input type="text" id="item-nome" placeholder="Nome do Item" required>
+                <input type="number" id="item-valor" placeholder="Valor Unitário (R$)" min="0" step="0.01" required>
+                <input type="number" id="item-quantidade" placeholder="Quantidade" min="1" required>
+                <button id="adicionar-item-btn"><i class="fas fa-plus"></i> Adicionar</button>
+            </div>
+        </section>
+
+        <section id="lista-compras">
+            <h2>Sua Lista <i class="fas fa-list-alt"></i></h2>
+            <div id="itens-container">
+                </div>
+            <div class="total-area">
+                <h3>Total Geral: <span id="total-geral">R$ 0,00</span></h3>
+            </div>
+        </section>
+
+        <section id="acoes">
+            <h2>Ações <i class="fas fa-tools"></i></h2>
+            <div class="acoes-group">
+                <button id="exportar-pdf-btn"><i class="fas fa-file-pdf"></i> Exportar PDF</button>
+                <button id="compartilhar-btn"><i class="fas fa-share-alt"></i> Compartilhar</button>
+                <button id="salvar-lista-btn"><i class="fas fa-save"></i> Salvar Lista</button>
+                <input type="file" id="importar-lista-input" accept=".json" style="display: none;">
+                <button id="importar-lista-btn"><i class="fas fa-upload"></i> Importar Lista</button>
+                <button id="limpar-lista-btn" class="danger-btn"><i class="fas fa-trash-alt"></i> Limpar Lista</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Minha Lista de Compras. Feito com <i class="fas fa-heart"></i></p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+</body>
+</html>
