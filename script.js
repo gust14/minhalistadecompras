@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const salvarListaBtn = document.getElementById('salvar-lista-btn');
     const importarListaBtn = document.getElementById('importar-lista-btn');
     const importarListaInput = document.getElementById('importar-lista-input');
-    const limparListaBtn = document.getElementById('limpar-lista-btn'); // Novo botão
+    const limparListaBtn = document.getElementById('limpar-lista-btn');
 
     let listaDeCompras = JSON.parse(localStorage.getItem('listaDeCompras')) || [];
 
@@ -56,11 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const actionButtons = modal.querySelectorAll('.confirm-btn, .cancel-btn, .danger-btn, .confirm-delete-btn, .confirm-clear-btn, .confirm-edit-btn');
         actionButtons.forEach(button => {
             // Remove qualquer listener anterior para evitar duplicação ou conflitos
-            button.onclick = null; 
+            button.onclick = null;
             button.onclick = (event) => {
                 event.stopPropagation(); // Previne que o clique se propague para o background do modal
-                modal.classList.remove('show');
-                setTimeout(() => modal.remove(), 300); // Esconde e remove após a animação
+                // Comentado para permitir que botões específicos do modal tenham sua própria lógica de fechamento
+                // modal.classList.remove('show');
+                // setTimeout(() => modal.remove(), 300); // Esconde e remove após a animação
             };
         });
 
@@ -92,19 +93,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         listaDeCompras.forEach((item, index) => {
-            const precoTotal = item.valor * item.quantidade;
+            const precoTotal = item.valor && item.valor > 0 ? item.valor * item.quantidade : 0;
             totalGeral += precoTotal;
 
             const itemCard = document.createElement('div');
             itemCard.classList.add('item-card');
+            if (item.pego) {
+                itemCard.classList.add('pego');
+            }
             itemCard.setAttribute('data-index', index);
 
             itemCard.innerHTML = `
+                <input type="checkbox" id="item-pego-${index}" class="item-checkbox" ${item.pego ? 'checked' : ''}>
+                <label for="item-pego-${index}" class="item-checkbox-label">
+                    <span class="item-checkbox-custom"><i class="fas fa-check"></i></span>
+                    ${item.nome}
+                </label>
                 <div class="item-info">
-                    <strong>${item.nome}</strong>
-                    <p>Valor Unitário: ${formatCurrency(item.valor)}</p>
+                    ${item.valor && item.valor > 0 ? `<p>Valor Unitário: ${formatCurrency(item.valor)}</p>` : ''}
                     <p>Quantidade: ${item.quantidade}</p>
-                    <p>Preço Total: ${formatCurrency(precoTotal)}</p>
+                    ${item.valor && item.valor > 0 ? `<p>Preço Total: ${formatCurrency(precoTotal)}</p>` : ''}
                 </div>
                 <div class="item-actions">
                     <button class="edit-btn"><i class="fas fa-edit"></i> Editar</button>
@@ -112,6 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             itensContainer.appendChild(itemCard);
+
+            // Adiciona listener para o checkbox
+            const checkbox = itemCard.querySelector(`#item-pego-${index}`);
+            checkbox.addEventListener('change', (e) => {
+                listaDeCompras[index].pego = e.target.checked;
+                renderizarLista(); // Re-renderiza para aplicar o estilo visual
+            });
         });
 
         totalGeralSpan.textContent = formatCurrency(totalGeral);
@@ -121,21 +136,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Adicionar Item ---
     adicionarItemBtn.addEventListener('click', () => {
         const nome = itemNomeInput.value.trim();
-        const valor = parseFloat(itemValorInput.value);
+        // Valor pode ser vazio ou nulo, mas se preenchido, deve ser um número válido.
+        let valor = parseFloat(itemValorInput.value);
+        if (isNaN(valor) || valor < 0) {
+            valor = 0; // Define como 0 se não for um número válido ou for negativo
+        }
         const quantidade = parseInt(itemQuantidadeInput.value);
 
-        if (nome && !isNaN(valor) && valor >= 0 && !isNaN(quantidade) && quantidade >= 1) {
-            listaDeCompras.push({ nome, valor, quantidade });
+        if (nome && !isNaN(quantidade) && quantidade >= 1) {
+            listaDeCompras.push({ nome, valor, quantidade, pego: false }); // Novo campo 'pego'
             renderizarLista();
             itemNomeInput.value = '';
             itemValorInput.value = '';
             itemQuantidadeInput.value = '';
             itemNomeInput.focus();
         } else {
-            // Este modal não possui um botão de "OK" que precisa ser clicado para fechar, então a lógica padrão do showModal é suficiente
             showModal(
                 'Ops! Algo deu errado!',
-                '<p>Por favor, preencha todos os campos corretamente.</p><p>O nome do item não pode ser vazio, e o valor unitário e a quantidade devem ser números válidos maiores que zero.</p>',
+                '<p>Por favor, preencha o **nome do item** e a **quantidade** corretamente.</p><p>O nome não pode ser vazio e a quantidade deve ser um número válido maior ou igual a 1.</p><p>O valor unitário é opcional e pode ser adicionado depois!</p>',
                 '<button class="confirm-btn">Entendi</button>'
             );
         }
@@ -158,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `<button class="danger-btn confirm-delete-btn"><i class="fas fa-trash-alt"></i> Sim, Excluir</button>
                  <button class="cancel-btn"><i class="fas fa-times"></i> Cancelar</button>`
             );
-            
+
             confirmModal.querySelector('.confirm-delete-btn').onclick = () => {
                 listaDeCompras.splice(index, 1);
                 renderizarLista();
@@ -181,9 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <label for="edit-nome">Nome do Item:</label>
                     <input type="text" id="edit-nome" value="${item.nome}" required>
                     <label for="edit-valor">Valor Unitário (R$):</label>
-                    <input type="number" id="edit-valor" value="${item.valor}" min="0" step="0.01" required>
+                    <input type="number" id="edit-valor" value="${item.valor > 0 ? item.valor : ''}" min="0" step="0.01">
                     <label for="edit-quantidade">Quantidade:</label>
                     <input type="number" id="edit-quantidade" value="${item.quantidade}" min="1" required>
+                    <div style="display: flex; align-items: center; margin-top: 15px;">
+                        <input type="checkbox" id="edit-pego" style="width: auto; margin-right: 10px;" ${item.pego ? 'checked' : ''}>
+                        <label for="edit-pego" style="margin-bottom: 0;">Item já pego?</label>
+                    </div>
                 </div>
                 `,
                 `
@@ -195,22 +217,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const editNome = editModal.querySelector('#edit-nome');
             const editValor = editModal.querySelector('#edit-valor');
             const editQuantidade = editModal.querySelector('#edit-quantidade');
+            const editPego = editModal.querySelector('#edit-pego');
 
             editModal.querySelector('.confirm-edit-btn').onclick = () => {
                 const novoNome = editNome.value.trim();
-                const novoValor = parseFloat(editValor.value);
+                let novoValor = parseFloat(editValor.value);
+                if (isNaN(novoValor) || novoValor < 0) {
+                    novoValor = 0;
+                }
                 const novaQuantidade = parseInt(editQuantidade.value);
+                const novoPego = editPego.checked;
 
-                if (novoNome && !isNaN(novoValor) && novoValor >= 0 && !isNaN(novaQuantidade) && novaQuantidade >= 1) {
+                if (novoNome && !isNaN(novaQuantidade) && novaQuantidade >= 1) {
                     item.nome = novoNome;
                     item.valor = novoValor;
                     item.quantidade = novaQuantidade;
+                    item.pego = novoPego;
                     renderizarLista();
                     editModal.classList.remove('show');
                     setTimeout(() => editModal.remove(), 300);
                 } else {
-                    // Aviso dentro do modal de edição, não precisa de novo modal completo
-                    alert('Dados inválidos. Por favor, preencha todos os campos corretamente.');
+                    alert('Dados inválidos. Por favor, preencha o nome e a quantidade corretamente. A quantidade deve ser um número válido maior ou igual a 1.');
                 }
             };
             editModal.querySelector('.cancel-btn').onclick = () => {
@@ -237,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `<button class="danger-btn confirm-clear-btn"><i class="fas fa-trash-alt"></i> Sim, Limpar Tudo</button>
              <button class="cancel-btn"><i class="fas fa-times"></i> Cancelar</button>`
         );
-        
+
         confirmClearModal.querySelector('.confirm-clear-btn').onclick = () => {
             listaDeCompras = [];
             renderizarLista();
@@ -421,10 +448,18 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = (e) => {
                 try {
                     const importedList = JSON.parse(e.target.result);
-                    if (Array.isArray(importedList) && importedList.every(item => item.nome && typeof item.valor === 'number' && typeof item.quantidade === 'number')) {
+                    // Adiciona a propriedade 'pego' se ela não existir nos itens importados
+                    const normalizedList = importedList.map(item => ({
+                        nome: item.nome,
+                        valor: typeof item.valor === 'number' && item.valor >= 0 ? item.valor : 0,
+                        quantidade: typeof item.quantidade === 'number' && item.quantidade >= 1 ? item.quantidade : 1,
+                        pego: typeof item.pego === 'boolean' ? item.pego : false
+                    }));
+
+                    if (Array.isArray(normalizedList) && normalizedList.every(item => item.nome && typeof item.valor === 'number' && typeof item.quantidade === 'number')) {
                         const importOptionsModal = showModal(
                             'Importar Lista',
-                            `<p>Sua lista importada contém **${importedList.length}** item(ns).</p>
+                            `<p>Sua lista importada contém **${normalizedList.length}** item(ns).</p>
                              <p>Deseja substituir sua lista atual ou adicionar estes itens à sua lista?</p>`,
                             `
                             <button id="replace-list-btn" class="danger-btn"><i class="fas fa-sync-alt"></i> Substituir Lista Atual</button>
@@ -432,9 +467,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="cancel-btn"><i class="fas fa-times"></i> Cancelar</button>
                             `
                         );
-                        
+
                         importOptionsModal.querySelector('#replace-list-btn').onclick = () => {
-                            listaDeCompras = importedList;
+                            listaDeCompras = normalizedList;
                             renderizarLista();
                             importOptionsModal.classList.remove('show');
                             setTimeout(() => { // Espera o modal de opções fechar
@@ -443,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             }, 300);
                         };
                         importOptionsModal.querySelector('#add-to-list-btn').onclick = () => {
-                            listaDeCompras = [...listaDeCompras, ...importedList];
+                            listaDeCompras = [...listaDeCompras, ...normalizedList];
                             renderizarLista();
                             importOptionsModal.classList.remove('show');
                             setTimeout(() => { // Espera o modal de opções fechar

@@ -508,6 +508,71 @@ footer .fas {
     }
 }
 
+/* Estilo para item "pego" */
+.item-card.pego {
+    background-color: #e6ffe6; /* Um verde bem claro para o card */
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.1); /* Sombra mais destacada */
+}
+
+.item-card.pego .item-info strong {
+    color: var(--primary-color);
+    text-decoration: line-through; /* Riscar o nome do item */
+}
+
+.item-card.pego .item-info p {
+    color: #5cb85c; /* Tom de verde para os detalhes */
+    text-decoration: line-through;
+}
+/* Estilo para o checkbox customizado */
+.item-checkbox {
+    /* Esconde o input original, mas mantém a funcionalidade */
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.item-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: var(--light-text-color);
+    user-select: none; /* Previne seleção de texto ao clicar */
+    margin-right: 15px; /* Espaço entre o checkbox e as informações */
+}
+
+.item-checkbox-custom {
+    height: 20px;
+    width: 20px;
+    background-color: var(--background-color);
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.item-checkbox-custom .fas {
+    color: white;
+    font-size: 14px;
+    display: none; /* Ícone de check escondido por padrão */
+}
+
+/* Quando o checkbox é marcado */
+.item-checkbox:checked + .item-checkbox-label .item-checkbox-custom {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.item-checkbox:checked + .item-checkbox-label .item-checkbox-custom .fas {
+    display: block; /* Mostra o ícone de check */
+}
+
 
 /* Responsividade */
 @media (max-width: 600px) {
@@ -631,6 +696,13 @@ footer .fas {
         /* Ajusta padding dos cards */
     }
 
+    .item-checkbox-label {
+        margin-bottom: 10px; /* Espaço abaixo do checkbox no mobile */
+        margin-right: 0;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
     .item-info {
         width: 100%;
         /* Faz a info ocupar toda a largura */
@@ -653,7 +725,7 @@ footer .fas {
         /* Alinha os botões de editar/excluir à direita */
         margin-left: 0;
         /* Reseta a margem */
-        margin-top: 5px;
+        margin-top: 10px;
         /* Adiciona um pequeno espaço superior */
     }
 
