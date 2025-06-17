@@ -1,15 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-    --primary-color: #4CAF50; /* Verde vibrante */
-    --secondary-color: #FFC107; /* Amarelo para destaques */
+    --primary-color: #4CAF50;
+    /* Verde vibrante */
+    --secondary-color: #FFC107;
+    /* Amarelo para destaques */
     --background-color: #f4f7f6;
     --card-background: #ffffff;
     --text-color: #333;
     --light-text-color: #666;
     --border-color: #eee;
     --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    --danger-color: #F44336; /* Vermelho para ações de perigo */
+    --danger-color: #F44336;
+    /* Vermelho para ações de perigo */
 }
 
 * {
@@ -215,7 +218,8 @@ button:active {
 }
 
 .item-actions .delete-btn {
-    background-color: var(--danger-color); /* Vermelho para exclusão */
+    background-color: var(--danger-color);
+    /* Vermelho para exclusão */
 }
 
 .item-actions .delete-btn:hover {
@@ -249,7 +253,8 @@ footer {
 }
 
 footer .fas {
-    color: #E91E63; /* Coração vermelho */
+    color: #E91E63;
+    /* Coração vermelho */
     margin: 0 5px;
 }
 
@@ -263,8 +268,10 @@ footer .fas {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.6); /* Mais escuro para destaque */
-    display: flex; /* Usar flexbox para centralizar */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Mais escuro para destaque */
+    display: flex;
+    /* Usar flexbox para centralizar */
     justify-content: center;
     align-items: center;
     opacity: 0;
@@ -280,12 +287,14 @@ footer .fas {
     margin: auto;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Sombra mais pronunciada */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /* Sombra mais pronunciada */
     width: 90%;
     max-width: 550px;
     text-align: center;
     position: relative;
-    transform: translateY(-20px); /* Animação de entrada */
+    transform: translateY(-20px);
+    /* Animação de entrada */
     transition: transform 0.3s ease-in-out;
 }
 
@@ -346,7 +355,8 @@ footer .fas {
 .social-share-buttons {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* Para telas menores */
+    flex-wrap: wrap;
+    /* Para telas menores */
     gap: 15px;
     margin-top: 20px;
 }
@@ -366,14 +376,28 @@ footer .fas {
 
 .social-share-buttons a:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.whatsapp-btn { background-color: #25D366; }
-.facebook-btn { background-color: #1877F2; }
-.twitter-btn { background-color: #1DA1F2; }
-.linkedin-btn { background-color: #0A66C2; }
-.email-btn { background-color: #D44638; }
+.whatsapp-btn {
+    background-color: #25D366;
+}
+
+.facebook-btn {
+    background-color: #1877F2;
+}
+
+.twitter-btn {
+    background-color: #1DA1F2;
+}
+
+.linkedin-btn {
+    background-color: #0A66C2;
+}
+
+.email-btn {
+    background-color: #D44638;
+}
 
 
 /* Tutorial styles */
@@ -404,12 +428,20 @@ footer .fas {
         background-color: white;
         padding: 0;
     }
-    header, main, footer, .acoes-group, .modal {
+
+    header,
+    main,
+    footer,
+    .acoes-group,
+    .modal {
         display: none;
     }
-    #pdf-content { /* Este id não será usado diretamente, mas sim gerado pelo jsPDF */
+
+    #pdf-content {
+        /* Este id não será usado diretamente, mas sim gerado pelo jsPDF */
         display: block !important;
-        width: 80mm; /* Largura padrão de cupom fiscal */
+        width: 80mm;
+        /* Largura padrão de cupom fiscal */
         margin: 0 auto;
         font-family: 'Courier New', monospace;
         font-size: 0.8em;
@@ -417,36 +449,49 @@ footer .fas {
         border: 1px dashed #ccc;
         padding: 10px;
     }
-    .pdf-header, .pdf-item, .pdf-total, .pdf-footer {
+
+    .pdf-header,
+    .pdf-item,
+    .pdf-total,
+    .pdf-footer {
         margin-bottom: 5px;
     }
+
     .pdf-header {
         text-align: center;
         border-bottom: 1px dashed black;
         padding-bottom: 5px;
     }
+
     .pdf-item {
         display: flex;
         justify-content: space-between;
     }
+
     .pdf-item-name {
         width: 60%;
     }
-    .pdf-item-qty, .pdf-item-price, .pdf-item-total {
+
+    .pdf-item-qty,
+    .pdf-item-price,
+    .pdf-item-total {
         width: 15%;
         text-align: right;
     }
+
     .pdf-total {
         text-align: right;
         border-top: 1px dashed black;
         padding-top: 5px;
         font-weight: bold;
     }
+
     .pdf-footer {
         text-align: center;
         margin-top: 10px;
         font-style: italic;
     }
+
     .pdf-footer strong {
         font-weight: bold;
     }
@@ -456,18 +501,130 @@ footer .fas {
 /* Responsividade */
 @media (max-width: 600px) {
     header h1 {
-        font-size: 2em;
+        font-size: 1.8em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    header h1 .fas {
+        margin-left: 8px;
+        /* Ajusta o espaçamento do ícone */
+        font-size: 0.9em;
+        /* Reduz o tamanho do ícone */
+    }
+
+    body {
+        padding: 15px;
+        /* Reduz o padding geral */
+    }
+
+    header {
+        padding: 15px 0;
+        /* Reduz o padding vertical do cabeçalho */
+        margin-bottom: 15px;
+        /* Reduz a margem inferior do cabeçalho */
     }
 
     main {
-        padding: 20px;
+        padding: 15px;
+        /* Reduz o padding da área principal */
+        margin-bottom: 15px;
+        /* Reduz a margem inferior da área principal */
     }
+
+    section {
+        margin-bottom: 20px;
+        /* Reduz a margem inferior das seções */
+    }
+
+    h2 {
+        font-size: 1.5em;
+        /* Reduz o tamanho do título da seção */
+        margin-bottom: 15px;
+        /* Reduz a margem inferior do título da seção */
+    }
+
+    .input-group {
+        gap: 10px;
+        /* Reduz o espaço entre os inputs */
+        margin-bottom: 15px;
+        /* Reduz a margem inferior do grupo de inputs */
+    }
+
+    .input-group input,
+    .input-group button {
+        padding: 10px;
+        /* Reduz o padding dos inputs e botões de adicionar */
+        font-size: 0.95em;
+        /* Reduz a fonte dos inputs e botões de adicionar */
+    }
+
+    button {
+        padding: 10px 15px;
+        /* Reduz o padding dos botões de ação */
+        font-size: 0.9em;
+        /* Reduz a fonte dos botões de ação */
+        min-width: auto;
+        /* Permite que os botões se ajustem ao conteúdo */
+    }
+
+    .acoes-group button {
+        min-width: 100%;
+        /* Faz os botões de ação ocuparem a largura total */
+    }
+
+    .item-card {
+        padding: 10px 15px;
+        /* Reduz o padding dos cards de item */
+    }
+
+    .item-info p {
+        font-size: 0.9em;
+        /* Reduz a fonte das informações do item */
+    }
+
+    .item-info strong {
+        font-size: 1em;
+        /* Reduz a fonte do nome do item */
+    }
+
+    .item-actions button {
+        padding: 6px 10px;
+        /* Reduz o padding dos botões de editar/excluir */
+        font-size: 0.85em;
+        /* Reduz a fonte dos botões de editar/excluir */
+    }
+
+    .total-area h3 {
+        font-size: 1.5em;
+        /* Reduz a fonte do total geral */
+    }
+
+    footer {
+        padding: 10px;
+        /* Reduz o padding do footer */
+        font-size: 0.85em;
+        /* Reduz a fonte do footer */
+        display: flex;
+        flex-direction: column;
+        /*Organiza os itens em coluna */
+        align-items: center;
+        /*Centraliza os itens horizontalmente*/
+        text-align: center;
+        /*Centraliza o texto dentro de cada item */
+    }
+
+    footer p {
+    margin-bottom: 5px; /* Adiciona um pequeno espaço entre as linhas */
+}
 
     .input-group {
         flex-direction: column;
     }
 
-    .input-group input, .input-group button {
+    .input-group input,
+    .input-group button {
         width: 100%;
     }
 
