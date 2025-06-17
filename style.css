@@ -1,15 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-    --primary-color: #4CAF50; /* Verde vibrante */
-    --secondary-color: #FFC107; /* Amarelo para destaques */
+    --primary-color: #4CAF50;
+    /* Verde vibrante */
+    --secondary-color: #FFC107;
+    /* Amarelo para destaques */
     --background-color: #f4f7f6;
     --card-background: #ffffff;
     --text-color: #333;
     --light-text-color: #666;
     --border-color: #eee;
     --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    --danger-color: #F44336; /* Vermelho para ações de perigo */
+    --danger-color: #F44336;
+    /* Vermelho para ações de perigo */
 }
 
 * {
@@ -47,12 +50,14 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Adicionado gap para espaçamento entre texto e ícone */
+    gap: 10px;
+    /* Adicionado gap para espaçamento entre texto e ícone */
 }
 
 header h1 .fas {
     /* Removido margin-left e font-size aqui, pois serão ajustados no media query para mobile */
-    font-size: 0.8em; /* Tamanho padrão do ícone */
+    font-size: 0.8em;
+    /* Tamanho padrão do ícone */
 }
 
 main {
@@ -215,7 +220,8 @@ button:active {
 }
 
 .item-actions .delete-btn {
-    background-color: var(--danger-color); /* Vermelho para exclusão */
+    background-color: var(--danger-color);
+    /* Vermelho para exclusão */
 }
 
 .item-actions .delete-btn:hover {
@@ -250,12 +256,15 @@ footer {
 
 /* Modificação para o rodapé: organiza o texto em duas linhas no mobile */
 footer p {
-    margin: 0; /* Reseta a margem padrão de p */
-    line-height: 1.4; /* Ajusta a altura da linha */
+    margin: 0;
+    /* Reseta a margem padrão de p */
+    line-height: 1.4;
+    /* Ajusta a altura da linha */
 }
 
 footer .fas {
-    color: #E91E63; /* Coração vermelho */
+    color: #E91E63;
+    /* Coração vermelho */
     margin: 0 5px;
 }
 
@@ -270,8 +279,10 @@ footer .fas {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.6); /* Mais escuro para destaque */
-    display: flex; /* Usar flexbox para centralizar */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Mais escuro para destaque */
+    display: flex;
+    /* Usar flexbox para centralizar */
     justify-content: center;
     align-items: center;
     opacity: 0;
@@ -287,12 +298,14 @@ footer .fas {
     margin: auto;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Sombra mais pronunciada */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /* Sombra mais pronunciada */
     width: 90%;
     max-width: 550px;
     text-align: center;
     position: relative;
-    transform: translateY(-20px); /* Animação de entrada */
+    transform: translateY(-20px);
+    /* Animação de entrada */
     transition: transform 0.3s ease-in-out;
 }
 
@@ -498,149 +511,202 @@ footer .fas {
 
 /* Responsividade */
 @media (max-width: 600px) {
+
     /* AJUSTES NO CABEÇALHO */
     header h1 {
-        font-size: 1.6em; /* Um pouco menor para caber melhor */
-        flex-direction: column; /* Ícone acima do título */
-        text-align: center; /* Centraliza o texto */
-        gap: 2px; /* Reduz o espaço entre o ícone e o texto */
+        font-size: 1.6em;
+        /* Um pouco menor para caber melhor */
+        flex-direction: column;
+        /* Ícone acima do título */
+        text-align: center;
+        /* Centraliza o texto */
+        gap: 2px;
+        /* Reduz o espaço entre o ícone e o texto */
     }
 
     header h1 .fas {
-        font-size: 1.5em; /* Aumenta o tamanho do ícone para destacá-lo acima do título */
-        margin-bottom: 5px; /* Adiciona um pequeno espaçamento abaixo do ícone */
-        margin-left: 0; /* Garante que não haja alinhamento lateral */
+        font-size: 1.5em;
+        /* Aumenta o tamanho do ícone para destacá-lo acima do título */
+        margin-bottom: 5px;
+        /* Adiciona um pequeno espaçamento abaixo do ícone */
+        margin-left: 0;
+        /* Garante que não haja alinhamento lateral */
     }
 
     /* AJUSTES GERAIS DE ESPAÇAMENTO E FONTES */
     body {
-        padding: 10px; /* Reduz o padding geral da página */
+        padding: 10px;
+        /* Reduz o padding geral da página */
     }
 
     header {
-        padding: 15px 0; /* Ajusta o padding vertical do cabeçalho */
-        margin-bottom: 15px; /* Reduz a margem inferior do cabeçalho */
-        border-radius: 0; /* Remove bordas arredondadas no topo para uma sensação de "tela cheia" */
+        padding: 15px 0;
+        /* Ajusta o padding vertical do cabeçalho */
+        margin-bottom: 15px;
+        /* Reduz a margem inferior do cabeçalho */
+        border-radius: 0;
+        /* Remove bordas arredondadas no topo para uma sensação de "tela cheia" */
     }
 
     main {
-        padding: 15px; /* Reduz o padding da área principal */
-        margin-bottom: 15px; /* Reduz a margem inferior da área principal */
-        border-radius: 8px; /* Ajusta o arredondamento para mobile */
+        padding: 15px;
+        /* Reduz o padding da área principal */
+        margin-bottom: 15px;
+        /* Reduz a margem inferior da área principal */
+        border-radius: 8px;
+        /* Ajusta o arredondamento para mobile */
     }
 
     section {
-        margin-bottom: 20px; /* Um pouco menos de margem entre seções */
+        margin-bottom: 20px;
+        /* Um pouco menos de margem entre seções */
     }
 
     h2 {
-        font-size: 1.4em; /* Reduz um pouco o tamanho do título da seção */
-        padding-bottom: 8px; /* Ajusta o padding inferior do título */
-        margin-bottom: 15px; /* Ajusta a margem inferior do título */
+        font-size: 1.4em;
+        /* Reduz um pouco o tamanho do título da seção */
+        padding-bottom: 8px;
+        /* Ajusta o padding inferior do título */
+        margin-bottom: 15px;
+        /* Ajusta a margem inferior do título */
     }
 
     h2 .fas {
-        font-size: 0.9em; /* Ajusta o tamanho dos ícones dos títulos das seções */
+        font-size: 0.9em;
+        /* Ajusta o tamanho dos ícones dos títulos das seções */
     }
 
 
     .input-group {
-        flex-direction: column; /* Coloca os inputs e botão em coluna */
-        gap: 10px; /* Reduz o espaço entre os elementos do grupo */
+        flex-direction: column;
+        /* Coloca os inputs e botão em coluna */
+        gap: 10px;
+        /* Reduz o espaço entre os elementos do grupo */
         margin-bottom: 15px;
     }
 
     .input-group input,
     .input-group button {
-        width: 100%; /* Faz inputs e botão ocuparem 100% da largura */
-        padding: 12px; /* Mantém um bom tamanho de toque */
-        font-size: 1em; /* Tamanho de fonte legível */
+        width: 100%;
+        /* Faz inputs e botão ocuparem 100% da largura */
+        padding: 12px;
+        /* Mantém um bom tamanho de toque */
+        font-size: 1em;
+        /* Tamanho de fonte legível */
     }
 
     button {
-        padding: 12px 15px; /* Padding padrão para botões no mobile */
-        font-size: 0.95em; /* Fonte ligeiramente menor para botões */
+        padding: 12px 15px;
+        /* Padding padrão para botões no mobile */
+        font-size: 0.95em;
+        /* Fonte ligeiramente menor para botões */
     }
 
     .acoes-group {
-        flex-direction: column; /* Botões de ação em coluna */
-        gap: 10px; /* Espaço entre os botões de ação */
+        flex-direction: column;
+        /* Botões de ação em coluna */
+        gap: 10px;
+        /* Espaço entre os botões de ação */
     }
 
     .acoes-group button {
-        min-width: 100%; /* Faz os botões de ação ocuparem a largura total */
+        min-width: 100%;
+        /* Faz os botões de ação ocuparem a largura total */
     }
 
     /* Otimização da Listagem de Itens */
     #itens-container {
-        gap: 10px; /* Reduz o espaço entre os cards de itens */
+        gap: 10px;
+        /* Reduz o espaço entre os cards de itens */
     }
 
     .item-card {
-        flex-direction: column; /* Empilha as informações do item e as ações */
-        align-items: flex-start; /* Alinha o conteúdo à esquerda */
-        gap: 8px; /* Espaço entre info e actions */
-        padding: 12px 15px; /* Ajusta padding dos cards */
+        flex-direction: column;
+        /* Empilha as informações do item e as ações */
+        align-items: flex-start;
+        /* Alinha o conteúdo à esquerda */
+        gap: 8px;
+        /* Espaço entre info e actions */
+        padding: 12px 15px;
+        /* Ajusta padding dos cards */
     }
 
     .item-info {
-        width: 100%; /* Faz a info ocupar toda a largura */
+        width: 100%;
+        /* Faz a info ocupar toda a largura */
     }
 
     .item-info p {
-        font-size: 0.85em; /* Torna as informações do item ligeiramente menores */
+        font-size: 0.85em;
+        /* Torna as informações do item ligeiramente menores */
     }
 
     .item-info strong {
-        font-size: 1em; /* Mantém o nome do item com bom destaque */
+        font-size: 1em;
+        /* Mantém o nome do item com bom destaque */
     }
 
     .item-actions {
-        width: 100%; /* Faz os botões de ação ocuparem toda a largura do card */
-        justify-content: flex-end; /* Alinha os botões de editar/excluir à direita */
-        margin-left: 0; /* Reseta a margem */
-        margin-top: 5px; /* Adiciona um pequeno espaço superior */
+        width: 100%;
+        /* Faz os botões de ação ocuparem toda a largura do card */
+        justify-content: flex-end;
+        /* Alinha os botões de editar/excluir à direita */
+        margin-left: 0;
+        /* Reseta a margem */
+        margin-top: 5px;
+        /* Adiciona um pequeno espaço superior */
     }
 
     .item-actions button {
-        padding: 8px 12px; /* Ajusta padding dos botões de editar/excluir */
-        font-size: 0.8em; /* Ajusta fonte dos botões de editar/excluir */
+        padding: 8px 12px;
+        /* Ajusta padding dos botões de editar/excluir */
+        font-size: 0.8em;
+        /* Ajusta fonte dos botões de editar/excluir */
     }
 
     .total-area {
-        margin-top: 20px; /* Reduz a margem superior do total */
-        padding-top: 15px; /* Reduz o padding superior do total */
+        margin-top: 20px;
+        /* Reduz a margem superior do total */
+        padding-top: 15px;
+        /* Reduz o padding superior do total */
     }
 
     .total-area h3 {
-        font-size: 1.5em; /* Ajusta o tamanho da fonte do total geral */
+        font-size: 1.5em;
+        /* Ajusta o tamanho da fonte do total geral */
     }
 
     /* AJUSTES NO RODAPÉ */
     footer {
-        padding: 10px; /* Reduz o padding do footer */
-        font-size: 0.8em; /* Fonte um pouco menor para o rodapé */
-        margin-top: 15px; /* Reduz a margem superior do rodapé */
-        flex-direction: column; /* Organiza os itens em coluna */
-        align-items: center; /* Centraliza os itens horizontalmente */
-        text-align: center; /* Centraliza o texto dentro de cada item */
-    }
-
-    /* Esta regra é fundamental para separar as duas partes do parágrafo */
-    footer p {
+        width: 100%;
+        max-width: 800px;
+        text-align: center;
+        /* Centraliza o texto no footer */
+        padding: 15px;
+        color: var(--light-text-color);
+        font-size: 0.9em;
+        margin-top: 20px;
         display: flex;
+        /* Adiciona display flex */
         flex-direction: column;
+        /* Coloca os parágrafos em coluna */
         align-items: center;
-        margin: 0; /* Remove margens padrão */
-        line-height: 1.4; /* Espaçamento entre as linhas internas do p */
+        /* Centraliza os itens (parágrafos) horizontalmente */
     }
 
+    footer p {
+        /* Aplicado a AMBOS os parágrafos no rodapé */
+        margin: 0;
+        /* Garante que os parágrafos não tenham margens extras */
+        padding: 2px 0;
+        /* Pequeno padding para espaçamento vertical entre as linhas */
+    }
 
-    /* Ajuste para o coração no rodapé para ficar na mesma linha do "Feito com" */
     footer p .fas {
-        margin-right: 2px; /* Espaço entre 'com' e o coração */
-        margin-left: 2px; /* Espaço entre o coração e 'por 14web' */
-        display: inline-block; /* Garante que o coração fique ao lado do texto antes do link */
+        color: #E91E63;
+        /* Coração vermelho */
+        margin: 0 5px;
+        /* Espaçamento ao redor do coração */
     }
 
     /* Modal Styling for mobile */
@@ -660,15 +726,19 @@ footer .fas {
         flex-direction: column;
         gap: 10px;
     }
+
     .modal-content .modal-actions button {
         max-width: 100%;
     }
 
     .social-share-buttons {
-        gap: 10px; /* Menor gap para botões de compartilhamento */
+        gap: 10px;
+        /* Menor gap para botões de compartilhamento */
     }
+
     .social-share-buttons a {
-        width: 45px; /* Ligeiramente menores */
+        width: 45px;
+        /* Ligeiramente menores */
         height: 45px;
         font-size: 1.3em;
     }
